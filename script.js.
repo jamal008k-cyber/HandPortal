@@ -1,84 +1,104 @@
-* {
-    box-sizing: border-box;
+const startButton = document.getElementById("start");
+const star = document.getElementById("star");
+const gameArea = document.getElementById("gameArea");
+
+const scoreText = document.getElementById("score");
+const timeText = document.getElementById("time");
+const recordText = document.getElementById("record");
+const message = document.getElementById("message");
+
+let score = 0;
+let time = 30;
+let gameRunning = false;
+let timer;
+
+let record = localStorage.getItem("starRecord") || 0;
+
+recordText.textContent = record;
+
+function moveStar() {
+
+    const areaWidth = gameArea.clientWidth;
+    const areaHeight = gameArea.clientHeight;
+
+    const starSize = 50;
+
+    const x = Math.random() * (areaWidth - starSize);
+    const y = Math.random() * (areaHeight - starSize);
+
+    star.style.left = x + "px";
+    star.style.top = y + "px";
 }
 
-body {
-    margin: 0;
-    min-height: 100vh;
-    background: radial-gradient(circle, #24103d, #080510);
-    color: white;
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+function startGame() {
+
+    score = 0;
+    time = 30;
+    gameRunning = true;
+
+    scoreText.textContent = score;
+    timeText.textContent = time;
+
+    message.textContent = "";
+
+    startButton.textContent = "ИГРА ИДЁТ...";
+
+    star.style.display = "block";
+
+    moveStar();
+
+    clearInterval(timer);
+
+    timer = setInterval(() => {
+
+        time--;
+
+        timeText.textContent = time;
+
+        if (time <= 0) {
+            endGame();
+        }
+
+    }, 1000);
 }
 
-.game {
-    width: 90%;
-    max-width: 900px;
-    text-align: center;
+function endGame() {
+
+    gameRunning = false;
+
+    clearInterval(timer);
+
+    star.style.display = "none";
+
+    startButton.textContent = "ИГРАТЬ СНОВА";
+
+    if (score > record) {
+
+        record = score;
+
+        localStorage.setItem("starRecord", record);
+
+        recordText.textContent = record;
+
+        message.textContent =
+            "🏆 НОВЫЙ РЕКОРД! " + score + " очков!";
+
+    } else {
+
+        message.textContent =
+            "Игра окончена! Ты набрала " + score + " очков.";
+    }
 }
 
-h1 {
-    text-shadow: 0 0 15px #c56cff;
-}
+star.addEventListener("click", () => {
 
-.stats {
-    display: flex;
-    justify-content: center;
-    gap: 35px;
-    margin: 20px 0;
-    font-size: 20px;
-}
+    if (!gameRunning) return;
 
-.stats span {
-    color: #e98cff;
-    font-weight: bold;
-}
+    score++;
 
-button {
-    padding: 14px 30px;
-    border: 2px solid #e98cff;
-    border-radius: 30px;
-    background: transparent;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 0 15px #e98cff;
-}
+    scoreText.textContent = score;
 
-button:hover {
-    background: #e98cff;
-    color: #16091f;
-}
+    moveStar();
+});
 
-#gameArea {
-    position: relative;
-    width: 100%;
-    height: 500px;
-    margin-top: 25px;
-    border: 2px solid #6f398c;
-    border-radius: 20px;
-    overflow: hidden;
-    background: rgba(0, 0, 0, 0.35);
-}
-
-#star {
-    position: absolute;
-    display: none;
-    font-size: 45px;
-    cursor: pointer;
-    user-select: none;
-    filter: drop-shadow(0 0 15px white);
-}
-
-#star:hover {
-    transform: scale(1.2);
-}
-
-#message {
-    margin-top: 20px;
-    font-size: 22px;
-    min-height: 30px;
-}
+startButton.addEventListener("click", startGame);
