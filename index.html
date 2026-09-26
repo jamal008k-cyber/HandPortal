@@ -3,24 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hand Portal</title>
+    <title>Лови звёзды ⭐</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div id="app">
-    <video id="video" autoplay playsinline></video>
-    <canvas id="canvas"></canvas>
+<div class="game">
 
-    <button id="start">ВКЛЮЧИТЬ КАМЕРУ</button>
+    <h1>⭐ ЛОВИ ЗВЁЗДЫ ⭐</h1>
 
-    <div id="status">Покажи две руки 👋</div>
+    <div class="stats">
+        <div>Очки: <span id="score">0</span></div>
+        <div>Время: <span id="time">30</span></div>
+        <div>Рекорд: <span id="record">0</span></div>
+    </div>
+
+    <button id="start">НАЧАТЬ ИГРУ</button>
+
+    <div id="gameArea">
+        <div id="star">⭐</div>
+    </div>
+
+    <div id="message"></div>
+
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
 <script src="script.js"></script>
 
 </body>
 </html>
-            "P
